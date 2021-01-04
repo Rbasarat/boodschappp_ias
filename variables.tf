@@ -1,6 +1,5 @@
 variable "scraper_vm_admin_username" {
-  type    = string
-  default = "niverhawk"
+  type = string
 }
 
 variable "ssh_public_key" {
@@ -10,4 +9,20 @@ variable "ssh_public_key" {
 variable "region" {
   type    = string
   default = "West Europe"
+}
+
+variable "az_subscription_id" {
+  type = string
+}
+
+variable "az_client_id" {
+  type = string
+}
+
+variable "az_tenant_id" {
+  type = string
+}
+
+variable "client_secret" {
+  type = string
 }
