@@ -74,7 +74,7 @@ resource "azurerm_network_interface" "scraper_vm_nic" {
   ip_configuration {
     name                          = "scraper-vm-nic-config"
     subnet_id                     = azurerm_subnet.scraper_vm_subnet.id
-    private_ip_address_allocation = "Static"
+    private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.scraper_vm_public_ip.id
   }
 
@@ -98,7 +98,7 @@ resource "azurerm_linux_virtual_machine" "scraper_vm" {
   size                  = "Standard_B2s"
 
   os_disk {
-    name                 = "myOsDisk"
+    name                 = "scraper-vm-disk"
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
@@ -116,7 +116,7 @@ resource "azurerm_linux_virtual_machine" "scraper_vm" {
 
   # #todo.
   admin_ssh_key {
-    username   = var.admin_username
+    username   = var.scraper_vm_admin_username
     public_key = var.ssh_public_key
   }
 
