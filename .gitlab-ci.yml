@@ -43,8 +43,8 @@ deploy:
   script:
     - terraform apply -input=false -auto-approve
   when: manual
-  # only:
-  #   - main
+  only:
+    - main
 
 destroy:
   stage: cleanup
