@@ -1,0 +1,55 @@
+image:
+  name: hashicorp/terraform:latest
+  entrypoint:
+    - /usr/bin/env
+    - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+variables:
+  TF_ROOT: ${CI_PROJECT_DIR}
+  TF_VAR_scraper_vm_admin_username: $SCRAPER_VM_ADMIN_USERNAME
+  TF_VAR_ssh_public_key: $SSH_PUBLIC_KEY
+  TF_VAR_az_subscription_id: $AZ_SUBSCRIPTION_ID
+  TF_VAR_az_client_id: $AZ_CLIENT_ID
+  TF_VAR_az_tenant_id: $AZ_TENANT_ID
+  TF_VAR_client_secret: $AZ_CLIENT_SECRET
+
+cache:
+  key: "${TF_ROOT}"
+  paths:
+    - ${TF_ROOT}/.terraform/
+
+before_script:
+  - cd ${TF_ROOT}
+  - terraform init
+
+stages:
+  - prepare
+  - build
+  - deploy
+  - cleanup
+
+init:
+  stage: prepare
+  script:
+    - terraform validate
+
+build:
+  stage: build
+  script:
+    - terraform plan
+
+deploy:
+  stage: deploy
+  script:
+    - terraform apply -input=false -auto-approve
+  when: manual
+  only:
+    - main
+
+destroy:
+  stage: cleanup
+  script:
+    - gitlab-terraform destroy
+  when: manual
+  only:
+    - main
