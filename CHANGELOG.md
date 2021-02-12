@@ -1,5 +1,7 @@
 ## 1.0.0 (Unreleased)
 
+## 0.2.0 (current)
+
 **Created**:
 
 - Custom CDN Endpoint for storage account
@@ -10,6 +12,7 @@
 **Changed**:
 
 - Opened port 80 for ip address rasjaad in scraper-vm
+- Removed debug ports for selenium driver
 
 **Removed**:
 
