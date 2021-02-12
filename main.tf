@@ -58,10 +58,22 @@ resource "azurerm_network_security_group" "scraper_vm_nsg" {
     priority                   = 1001
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "Tcp"
+    protocol                   = "TCP"
     source_port_range          = "*"
     destination_port_range     = "22"
-    source_address_prefix      = "*"
+    source_address_prefix      = var.private_ip_rasjaad
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "port80"
+    priority                   = 1011
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "TCP"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = var.private_ip_rasjaad
     destination_address_prefix = "*"
   }
 
@@ -118,7 +130,6 @@ resource "azurerm_linux_virtual_machine" "scraper_vm" {
   admin_username                  = var.scraper_vm_admin_username
   disable_password_authentication = true
 
-  # #todo.
   admin_ssh_key {
     username   = var.scraper_vm_admin_username
     public_key = var.ssh_public_key
@@ -126,5 +137,35 @@ resource "azurerm_linux_virtual_machine" "scraper_vm" {
 
   tags = {
     service = "boodschappp_scrapers"
+  }
+}
+
+# Storage account
+resource "azurerm_storage_account" "static-content-storage" {
+  name                     = "boodschappp"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = var.region
+  account_tier             = "Standard"
+  account_replication_type = "ZRS"
+  allow_blob_public_access = true
+
+}
+#cdn profile
+resource "azurerm_cdn_profile" "cdn-website" {
+  name                = "static-cdn"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.region
+  sku                 = "Standard_Akamai"
+}
+# cdn endpoint for storage
+resource "azurerm_cdn_endpoint" "static-boodschappp-nl" {
+  name                = "boodschappp-static"
+  profile_name        = azurerm_cdn_profile.cdn-website.name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.region
+
+  origin {
+    name      = "boodschappp-nl"
+    host_name = "boodschappp.blob.core.windows.net"
   }
 }

@@ -26,3 +26,7 @@ variable "az_tenant_id" {
 variable "client_secret" {
   type = string
 }
+
+variable "private_ip_rasjaad" {
+  type = string
+}
