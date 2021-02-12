@@ -9,3 +9,7 @@ Infratstructure as code for boodschappp project
 3. Finish feature
 4. Wait for CI(gitlab) to complete.
 5. Start deploy job manually.
+
+## Notes
+
+- The cdn endpoint custom domain is not set in terraform

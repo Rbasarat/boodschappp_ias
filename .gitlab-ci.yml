@@ -12,6 +12,7 @@ variables:
   TF_VAR_az_client_id: $AZ_CLIENT_ID
   TF_VAR_az_tenant_id: $AZ_TENANT_ID
   TF_VAR_client_secret: $AZ_CLIENT_SECRET
+  PRIVATE_IP_RASJAAD: $PRIVATE_IP_RASJAAD
 
 cache:
   key: "${TF_ROOT}"
