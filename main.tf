@@ -111,12 +111,12 @@ resource "azurerm_linux_virtual_machine" "scraper_vm" {
   location              = var.region
   resource_group_name   = azurerm_resource_group.rg.name
   network_interface_ids = [azurerm_network_interface.scraper_vm_nic.id]
-  size                  = "Standard_B2s"
+  size                  = "Standard_B1s"
 
   os_disk {
     name                 = "scraper-vm-disk"
     caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
+    storage_account_type = "Standard_LRS"
   }
 
   source_image_reference {
